@@ -7,7 +7,7 @@ from ship import Ship
 from bullet import Bullet
 from invader import Invader
 from life import Life
-from utils import WHITE_COLOR
+from utils import WHITE_COLOR, DATA_DIRECTORY
 
 pygame.init()
 
@@ -20,12 +20,8 @@ class Game:
         self.screen_size = self.screen_width, self.screen_height
 
         # Background Game
-        self.background_image = pygame.image.load("resources/images/gamebackground.jpg")
+        self.background_image = pygame.image.load(DATA_DIRECTORY + "gamebackground.jpg")
         self.background_rect = self.background_image.get_rect()
-
-        # Sound Game
-        self.laser_sound = pygame.mixer.Sound('resources/sounds/laser_shot.wav')
-        self.laser_sound.set_volume(0.2)
 
         # Labels
         self.font = pygame.font.SysFont(None, 40)
@@ -117,13 +113,13 @@ class Game:
                 pygame.mixer.music.rewind()
 
             if self.ship.shoot:
-                self.laser_sound.play()
+                # self.laser_sound.play()
 
                 if self.bullet.sprite.y > 0 and not self.invader_exploding:
                     self.ship.shooting = True
                     self.bullet.sprite = self.bullet.sprite.move([0, -6])
                 else:
-                    self.laser_sound.fadeout(1000)
+                    # self.laser_sound.fadeout(1000)
                     self.bullet.sprite.x, self.bullet.sprite.y = (self.ship.sprite.x + self.ship.sprite.width / 2, self.ship.sprite.y)
                     self.ship.shoot = False
                     self.ship.shooting = False

@@ -3,7 +3,7 @@
 import sys
 import pygame
 
-from utils import WHITE_COLOR
+from utils import WHITE_COLOR, DATA_DIRECTORY
 
 
 class Settings:
@@ -14,7 +14,7 @@ class Settings:
         self.size = self.screen_width, self.screen_height
         self.escape_selected = False
 
-        self.background_image = pygame.image.load('resources/images/menusettingsbackground.jpg')
+        self.background_image = pygame.image.load(DATA_DIRECTORY + 'menusettingsbackground.jpg')
         self.background_image_rect = self.background_image.get_rect()
 
         self.font = pygame.font.SysFont(None, 40)

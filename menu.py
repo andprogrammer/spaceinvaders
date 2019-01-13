@@ -16,16 +16,16 @@ class Menu:
 
         # Background Main Menu
         self.background_color = background_color
-        self.background_image = pygame.image.load('resources/images/menubackground.jpg')
+        self.background_image = pygame.image.load(DATA_DIRECTORY + 'menubackground.jpg')
         self.background_image_rect = self.background_image.get_rect()
 
-        # Sound Menu Change
-        self.menu_sound = pygame.mixer.Sound('resources/sounds/menu_noise.wav')
-        self.valid_menu_sound = pygame.mixer.Sound('resources/sounds/menu_valid_sound.wav')
-
-        # Menu Music
-        self.menu_music = pygame.mixer.music.load('resources/sounds/music.mp3')
-        pygame.mixer.music.set_volume(0.5)
+        # # Sound Menu Change
+        # self.menu_sound = pygame.mixer.Sound(DATA_DIRECTORY + 'menu_noise.wav')
+        # self.valid_menu_sound = pygame.mixer.Sound(DATA_DIRECTORY + 'menu_valid_sound.wav')
+        #
+        # # Menu Music
+        # self.menu_music = pygame.mixer.music.load(DATA_DIRECTORY + 'music.mp3')
+        # pygame.mixer.music.set_volume(0.5)
 
         # Main Menu
         self.clock = pygame.time.Clock()
@@ -60,9 +60,9 @@ class Menu:
             # Limit frame speed to 50 FPS
             # self.clock.tick(20)
 
-            if not pygame.mixer.music.get_busy():
-                pygame.mixer.music.rewind()
-                pygame.mixer.music.play()
+            # if not pygame.mixer.music.get_busy():
+            #     pygame.mixer.music.rewind()
+            #     pygame.mixer.music.play()
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -70,19 +70,19 @@ class Menu:
                     sys.exit()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
-                        self.menu_sound.play()
+                        # self.menu_sound.play()
                         for index, item in enumerate(self.menu_items):
                             if self.current_item[0] == item[0]:
                                 if self.index_selected > 0:
                                     self.index_selected -= 1
                     if event.key == pygame.K_DOWN:
-                        self.menu_sound.play()
+                        # self.menu_sound.play()
                         for index, item in enumerate(self.menu_items):
                             if self.current_item[0] == item[0]:
                                 if self.index_selected < (len(self.menu_items) - 1):
                                     self.index_selected += 1
                     if event.key == pygame.K_RETURN:
-                        self.valid_menu_sound.play()
+                        # self.valid_menu_sound.play()
                         if len(self.current_item) > 0:
                             if self.current_item[0] == START_GAME_LABEL:
                                 self.start_selected = True

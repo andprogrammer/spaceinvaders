@@ -10,3 +10,5 @@ QUIT_GAME_LABEL = "Quit Game"
 
 MENU_CAPTION = "Menu"
 GAME_CAPTION = "Game"
+
+DATA_DIRECTORY = "./data/"
