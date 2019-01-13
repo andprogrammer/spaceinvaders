@@ -5,7 +5,7 @@ import pygame
 
 class Ship(object):
     def __init__(self, screen_size):
-        self.image = pygame.image.load("./resources/images/spaceship.png")
+        self.image = pygame.image.load("./resources/images/ship.png")
         self.sprite = self.image.get_rect()
         if 2 == len(screen_size):
             pos = (screen_size[0] / 2 - self.sprite.width / 2, screen_size[1] - self.sprite.height)
