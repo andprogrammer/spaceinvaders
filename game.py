@@ -113,13 +113,10 @@ class Game:
                 pygame.mixer.music.rewind()
 
             if self.ship.shoot:
-                # self.laser_sound.play()
-
                 if self.bullet.sprite.y > 0 and not self.invader_exploding:
                     self.ship.shooting = True
                     self.bullet.sprite = self.bullet.sprite.move([0, -6])
                 else:
-                    # self.laser_sound.fadeout(1000)
                     self.bullet.sprite.x, self.bullet.sprite.y = (self.ship.sprite.x + self.ship.sprite.width / 2, self.ship.sprite.y)
                     self.ship.shoot = False
                     self.ship.shooting = False
