@@ -3,7 +3,7 @@
 import pygame
 
 
-class Spaceship(object):
+class Ship(object):
     def __init__(self, screen_size):
         self.image = pygame.image.load("./resources/images/spaceship.png")
         self.sprite = self.image.get_rect()

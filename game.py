@@ -3,7 +3,7 @@
 import sys
 import pygame
 from random import randint
-from spaceship import Spaceship
+from ship import Ship
 from bullet import Bullet
 from invader import Invader
 from life import Life
@@ -40,9 +40,9 @@ class Game:
         self.invaders = []
         self.number_of_invaders = 12
 
-        # Spaceship and bullets
-        self.spaceship = Spaceship(self.screen_size)
-        self.init_position_bullet = (self.spaceship.sprite.x + self.spaceship.sprite.width / 2, self.spaceship.sprite.y)
+        # Ship and bullets
+        self.ship = Ship(self.screen_size)
+        self.init_position_bullet = (self.ship.sprite.x + self.ship.sprite.width / 2, self.ship.sprite.y)
         self.bullet = Bullet(self.init_position_bullet)
 
         self.game_over = False
@@ -101,32 +101,32 @@ class Game:
             keys = pygame.key.get_pressed()
 
             if keys[pygame.K_LEFT]:
-                self.spaceship.sprite.x -= 10
-                if not self.spaceship.shooting:
+                self.ship.sprite.x -= 10
+                if not self.ship.shooting:
                     self.bullet.sprite.x -= 10
             elif keys[pygame.K_RIGHT]:
-                self.spaceship.sprite.x += 10
-                if not self.spaceship.shooting:
+                self.ship.sprite.x += 10
+                if not self.ship.shooting:
                     self.bullet.sprite.x += 10
             elif keys[pygame.K_SPACE]:
-                self.spaceship.shoot = True
+                self.ship.shoot = True
             elif keys[pygame.K_ESCAPE]:
                 # Go back to the game menu
                 game_loop = False
                 self.escape_selected = True
                 pygame.mixer.music.rewind()
 
-            if self.spaceship.shoot:
+            if self.ship.shoot:
                 self.laser_sound.play()
 
                 if self.bullet.sprite.y > 0 and not self.invader_exploding:
-                    self.spaceship.shooting = True
+                    self.ship.shooting = True
                     self.bullet.sprite = self.bullet.sprite.move([0, -6])
                 else:
                     self.laser_sound.fadeout(1000)
-                    self.bullet.sprite.x, self.bullet.sprite.y = (self.spaceship.sprite.x + self.spaceship.sprite.width / 2, self.spaceship.sprite.y)
-                    self.spaceship.shoot = False
-                    self.spaceship.shooting = False
+                    self.bullet.sprite.x, self.bullet.sprite.y = (self.ship.sprite.x + self.ship.sprite.width / 2, self.ship.sprite.y)
+                    self.ship.shoot = False
+                    self.ship.shooting = False
                     self.invader_exploding = False
 
             item_to_remove = None
@@ -191,13 +191,13 @@ class Game:
                     self.screen.blit(self.enemy_bullet.image, self.enemy_bullet.sprite)
 
             # Shuttle Displaying and Colision
-            if self.spaceship.sprite.collidepoint(self.enemy_bullet.sprite.x, self.enemy_bullet.sprite.y) and not self.spaceship.exploding:
+            if self.ship.sprite.collidepoint(self.enemy_bullet.sprite.x, self.enemy_bullet.sprite.y) and not self.ship.exploding:
                 self.timecount = self.nasty_shoot_time
                 self.has_already_chosen = False
-                self.spaceship.exploding = True
+                self.ship.exploding = True
             else:
                 self.screen.blit(self.bullet.image, self.bullet.sprite)
-                self.screen.blit(self.spaceship.image, self.spaceship.sprite)
+                self.screen.blit(self.ship.image, self.ship.sprite)
 
             self.handle_life()
             self.handle_labels()
@@ -219,13 +219,13 @@ class Game:
             self.screen.blit(self.game_over_label, game_over_label_position)
 
     def handle_life(self):
-        if self.spaceship.exploding:
-            self.spaceship.exploding = False
+        if self.ship.exploding:
+            self.ship.exploding = False
             if len(self.lifes) > 0:
                 self.lifes.pop()
             if len(self.lifes) == 0:
                 self.game_over = True
-                self.spaceship.exploding = False
+                self.ship.exploding = False
 
         for life in self.lifes:
             self.screen.blit(life.image, life.sprite)
