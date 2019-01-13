@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 import sys
 import pygame
 
@@ -8,7 +9,7 @@ pygame.init()
 
 
 class Menu:
-    def __init__(self, screen, menu_items, background_color=BLACK_COLOR, font=None, font_size=80, font_color=WHITE_COLOR):
+    def __init__(self, screen, menu_items, background_color=BLACK_COLOR, font=None, font_size=80, font_color=YELLOW_COLOR):
         self.screen = screen
         self.screen_width = self.screen.get_rect().width
         self.screen_height = self.screen.get_rect().height

@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 import sys
 import pygame
 from random import randint
@@ -19,7 +20,7 @@ class Game:
         self.screen_size = self.screen_width, self.screen_height
 
         # Background Game
-        self.background_image = pygame.image.load("resources/images/starsbackground.jpg")
+        self.background_image = pygame.image.load("resources/images/gamebackground.jpg")
         self.background_rect = self.background_image.get_rect()
 
         # Sound Game

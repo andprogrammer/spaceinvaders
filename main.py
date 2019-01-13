@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 import pygame
 from game import Game
 from menu import Menu

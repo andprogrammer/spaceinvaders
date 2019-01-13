@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 import sys
 import pygame
 
@@ -13,6 +14,9 @@ class Settings:
         self.size = self.screen_width, self.screen_height
         self.escape_selected = False
 
+        self.background_image = pygame.image.load('resources/images/menusettingsbackground.jpg')
+        self.background_image_rect = self.background_image.get_rect()
+
         self.font = pygame.font.SysFont(None, 40)
         self.esc_label = self.font.render("Esc - back", 1, WHITE_COLOR)
         self.space_label = self.font.render("Space - shoot", 1, WHITE_COLOR)
@@ -22,8 +26,7 @@ class Settings:
     def run(self):
         settings_loop = True
         while settings_loop:
-            # Redraw the background
-            self.screen.fill((0, 0, 0))
+            self.screen.blit(self.background_image, self.background_image_rect)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
