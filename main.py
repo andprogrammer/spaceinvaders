@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 import pygame
 from game import Game
-from menu import GameMenu
-from settings import GameSettings
+from menu import Menu
+from settings import Settings
 
 pygame.init()
 
@@ -17,8 +17,8 @@ pygame.display.set_caption('Game Menu')
 menu_items = ('Start', 'Settings', 'Quit')
 
 # Views initialization
-gm = GameMenu(screen, menu_items)
-gs = GameSettings(screen)
+gm = Menu(screen, menu_items)
+gs = Settings(screen)
 g = None
 
 menu_selected = True

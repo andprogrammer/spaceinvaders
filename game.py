@@ -6,6 +6,7 @@ from spaceship import Spaceship
 from bullet import Bullet
 from invader import Invader
 from life import Life
+from utils import WHITE_COLOR
 
 pygame.init()
 
@@ -13,13 +14,13 @@ pygame.init()
 class Game:
     def __init__(self, screen):
         self.screen = screen
-        self.scr_width = self.screen.get_rect().width
-        self.scr_height = self.screen.get_rect().height
-        self.screen_size = self.scr_width, self.scr_height
+        self.screen_width = self.screen.get_rect().width
+        self.screen_height = self.screen.get_rect().height
+        self.screen_size = self.screen_width, self.screen_height
 
         # Background Game
-        self.bg = pygame.image.load("resources/images/starsbackground.jpg")
-        self.bg_rect = self.bg.get_rect()
+        self.background_image = pygame.image.load("resources/images/starsbackground.jpg")
+        self.background_rect = self.background_image.get_rect()
 
         # Sound Game
         self.laser_sound = pygame.mixer.Sound('resources/sounds/laser_shot.wav')
@@ -27,31 +28,29 @@ class Game:
 
         # Labels
         self.font = pygame.font.SysFont(None, 40)
-        self.label_game_over = self.font.render("Game Over", 1, (255, 255, 255))
-        self.label_victory = self.font.render("Victory", 1, (255, 255, 255))
+        self.game_over_label = self.font.render("Game Over", 1, WHITE_COLOR)
+        self.victory_label = self.font.render("Victory", 1, WHITE_COLOR)
 
         # Life Bar
         self.lifes = []
-        self.lifes_number = 3
+        self.number_of_lifes = 3
 
         # Invaders
         self.invaders = []
-        self.invaders_number = 10
+        self.number_of_invaders = 12
 
         # Spaceship and bullets
         self.spaceship = Spaceship(self.screen_size)
-        self.init_pos_bullet = (
-            self.spaceship.sprite.x + self.spaceship.sprite.width / 2, self.spaceship.sprite.y
-        )
-        self.bullet = Bullet(self.init_pos_bullet)
+        self.init_position_bullet = (self.spaceship.sprite.x + self.spaceship.sprite.width / 2, self.spaceship.sprite.y)
+        self.bullet = Bullet(self.init_position_bullet)
 
         self.game_over = False
         self.victory = False
         self.escape_selected = False
 
         # Objects initialisation
-        self.randinvader = ()
-        self.ennemybullet = ()
+        self.rand_invader = ()
+        self.enemy_bullet = ()
 
         # Invaders
         self.has_already_chosen = False
@@ -73,24 +72,24 @@ class Game:
         self.timecount = 0
 
         # Init Invaders
-        self.init_x = 10
-        for i in range(self.invaders_number):
-            self.invaders.append(Invader((self.init_x, 10)))
-            self.init_x += 50
+        self.invader_init_position_x = 20
+        for invader in range(self.number_of_invaders):
+            self.invaders.append(Invader((self.invader_init_position_x, 70)))
+            self.invader_init_position_x += 50
 
         # Init life bar
-        self.init_life_x = self.scr_width - 120
+        self.life_init_position_x = 20
 
-        for i in range(self.lifes_number):
-            self.lifes.append(Life((self.init_life_x, 0)))
-            self.init_life_x += 40
+        for invader in range(self.number_of_lifes):
+            self.lifes.append(Life((self.life_init_position_x, 0)))
+            self.life_init_position_x += 40
 
     def run(self):
-        mainloop = True
-        while mainloop:
+        game_loop = True
+        while game_loop:
             self.clock.tick(50)
             self.screen.fill([0, 0, 0])
-            self.screen.blit(self.bg, self.bg_rect)
+            self.screen.blit(self.background_image, self.background_rect)
 
             # Close the game when the red cross is clicked
             for event in pygame.event.get():
@@ -102,32 +101,29 @@ class Game:
 
             if keys[pygame.K_LEFT]:
                 self.spaceship.sprite.x -= 10
-                if self.spaceship.shooting is False:
+                if not self.spaceship.shooting:
                     self.bullet.sprite.x -= 10
             elif keys[pygame.K_RIGHT]:
                 self.spaceship.sprite.x += 10
-                if self.spaceship.shooting is False:
+                if not self.spaceship.shooting:
                     self.bullet.sprite.x += 10
             elif keys[pygame.K_SPACE]:
                 self.spaceship.shoot = True
             elif keys[pygame.K_ESCAPE]:
                 # Go back to the game menu
-                mainloop = False
+                game_loop = False
                 self.escape_selected = True
                 pygame.mixer.music.rewind()
 
-            if self.spaceship.shoot is True:
+            if self.spaceship.shoot:
                 self.laser_sound.play()
 
-                if self.bullet.sprite.y > 0 and self.invader_exploding is False:
+                if self.bullet.sprite.y > 0 and not self.invader_exploding:
                     self.spaceship.shooting = True
                     self.bullet.sprite = self.bullet.sprite.move([0, -6])
                 else:
                     self.laser_sound.fadeout(1000)
-                    self.bullet.sprite.x, self.bullet.sprite.y = (
-                        self.spaceship.sprite.x + self.spaceship.sprite.width / 2, self.spaceship.sprite.y
-                    )
-
+                    self.bullet.sprite.x, self.bullet.sprite.y = (self.spaceship.sprite.x + self.spaceship.sprite.width / 2, self.spaceship.sprite.y)
                     self.spaceship.shoot = False
                     self.spaceship.shooting = False
                     self.invader_exploding = False
@@ -165,16 +161,16 @@ class Game:
 
                 if len(self.invaders) > 0 and not self.game_over:
                     if len(self.invaders) is not 1:
-                        self.randinvader = self.invaders[randint(1, len(self.invaders) - 1)]
+                        self.rand_invader = self.invaders[randint(1, len(self.invaders) - 1)]
                     else:
-                        self.randinvader = self.invaders[0]
+                        self.rand_invader = self.invaders[0]
 
                     self.has_already_chosen = True
-                    posx = self.randinvader.sprite.x
-                    width = self.randinvader.sprite.width
-                    height = self.randinvader.sprite.height
-                    posy = self.randinvader.sprite.y
-                    self.ennemybullet = Bullet((posx + width / 2, posy + height))
+                    posx = self.rand_invader.sprite.x
+                    width = self.rand_invader.sprite.width
+                    height = self.rand_invader.sprite.height
+                    posy = self.rand_invader.sprite.y
+                    self.enemy_bullet = Bullet((posx + width / 2, posy + height))
                 else:
                     self.victory = True
 
@@ -186,12 +182,12 @@ class Game:
                 self.timecount = 0
                 self.has_already_chosen = False
             elif self.timecount < self.nasty_shoot_time and self.has_already_chosen:
-                if self.ennemybullet.sprite.y < self.scr_height:
-                    self.ennemybullet.sprite = self.ennemybullet.sprite.move([0, 6])
-                    self.screen.blit(self.ennemybullet.image, self.ennemybullet.sprite)
+                if self.enemy_bullet.sprite.y < self.screen_height:
+                    self.enemy_bullet.sprite = self.enemy_bullet.sprite.move([0, 6])
+                    self.screen.blit(self.enemy_bullet.image, self.enemy_bullet.sprite)
 
             # Shuttle Displaying and Colision
-            if self.spaceship.sprite.collidepoint(self.ennemybullet.sprite.x, self.ennemybullet.sprite.y) and self.spaceship.exploding is False:
+            if self.spaceship.sprite.collidepoint(self.enemy_bullet.sprite.x, self.enemy_bullet.sprite.y) and not self.spaceship.exploding:
                 self.timecount = self.nasty_shoot_time
                 self.has_already_chosen = False
                 self.spaceship.exploding = True
@@ -199,41 +195,33 @@ class Game:
                 self.screen.blit(self.bullet.image, self.bullet.sprite)
                 self.screen.blit(self.spaceship.image, self.spaceship.sprite)
 
-            # Life Management and Displaying
-            if self.spaceship.exploding:
-                self.spaceship.exploding = False
-                if len(self.lifes) > 0:
-                    self.lifes.pop()
-                else:
-                    self.game_over = True
-                    self.spaceship.exploding = False
-
-            # Remaining lifes
-            pygame.draw.rect(self.screen, (255, 255, 255), [self.scr_width - 120, 0, 120, 40], 1)
-
-            for life in self.lifes:
-                self.screen.blit(life.image, life.sprite)
-
-            if self.victory:
-                self.screen.blit(
-                    self.label_victory,
-                    (
-                        self.scr_width / 2 - self.label_victory.get_rect().width / 2,
-                        self.scr_height / 2 - self.label_victory.get_rect().height / 2
-                    )
-                )
-
-            if self.game_over:
-                self.screen.blit(
-                    self.label_game_over,
-                    (
-                        self.scr_width / 2 - self.label_game_over.get_rect().width / 2,
-                        self.scr_height / 2 - self.label_game_over.get_rect().height / 2
-                    )
-                )
+            self.handle_life()
+            self.handle_labels()
 
             pygame.display.flip()
 
             if self.game_over or self.victory:
-                pygame.time.delay(4000)
-                mainloop = False
+                pygame.time.delay(2000)
+                game_loop = False
+
+    def handle_labels(self):
+        if self.victory:
+            victory_label_position = (self.screen_width / 2 - self.victory_label.get_rect().width / 2,
+                                      self.screen_height / 2 - self.victory_label.get_rect().height / 2)
+            self.screen.blit(self.victory_label, victory_label_position)
+        if self.game_over:
+            game_over_label_position = (self.screen_width / 2 - self.game_over_label.get_rect().width / 2,
+                                        self.screen_height / 2 - self.game_over_label.get_rect().height / 2)
+            self.screen.blit(self.game_over_label, game_over_label_position)
+
+    def handle_life(self):
+        if self.spaceship.exploding:
+            self.spaceship.exploding = False
+            if len(self.lifes) > 0:
+                self.lifes.pop()
+            if len(self.lifes) == 0:
+                self.game_over = True
+                self.spaceship.exploding = False
+
+        for life in self.lifes:
+            self.screen.blit(life.image, life.sprite)
