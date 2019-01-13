@@ -3,47 +3,52 @@ import pygame
 from game import Game
 from menu import Menu
 from settings import Settings
+from utils import *
 
 pygame.init()
 
-# set_mode(resolution=(width, height), flags=0, depth=0)
-# flags : collection of qdditional options
-# depth : number of bits use for colors
-screen = pygame.display.set_mode((640, 480), 0, 32)
-bg_color = (0, 0, 0)
 
-# Game Menu
-pygame.display.set_caption('Game Menu')
-menu_items = ('Start', 'Settings', 'Quit')
+def application():
+    # set_mode(resolution=(width, height), flags=0, depth=0)
+    # flags : collection of qdditional options
+    # depth : number of bits use for colors
+    screen = pygame.display.set_mode((640, 480), 0, 32)
 
-# Views initialization
-gm = Menu(screen, menu_items)
-gs = Settings(screen)
-g = None
+    # Game Menu
+    pygame.display.set_caption(MENU_CAPTION)
+    menu_items = (START_GAME_LABEL, GAME_SETTINGS_LABEL, QUIT_GAME_LABEL)
 
-menu_selected = True
-mainloop = True
-while mainloop:
+    # Views initialization
+    menu = Menu(screen, menu_items)
+    settings = Settings(screen)
+    game = None
 
-    screen.fill(bg_color)
-    if menu_selected or g.escape_selected:
-        gm.run()
-        if g is not None:
-            g.escape_selected = False
-        gs.escape_selected = False
+    menu_selected = True
+    main_loop = True
+    while main_loop:
+        screen.fill(BLACK_COLOR)
+        if menu_selected or game.escape_selected:
+            menu.run()
+            if game is not None:
+                game.escape_selected = False
+            settings.escape_selected = False
 
-    if gm.start_selected:
-        pygame.display.set_caption('Game')
-        g = Game(screen)
-        g.run()
-        gm.start_selected = False
-        gm.quit_select = False
+        if menu.start_selected:
+            pygame.display.set_caption(GAME_CAPTION)
+            game = Game(screen)
+            game.run()
+            menu.start_selected = False
+            menu.quit_select = False
 
-    if gm.settings_selected:
-        gs.run()
-        gm.settings_selected = False
+        if menu.settings_selected:
+            settings.run()
+            menu.settings_selected = False
 
-    if gm.quit_select is True:
-        mainloop = False
+        if menu.quit_select is True:
+            main_loop = False
 
-    pygame.display.flip()
+        pygame.display.flip()
+
+
+if __name__ == "__main__":
+    application()

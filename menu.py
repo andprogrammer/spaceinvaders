@@ -2,19 +2,19 @@
 import sys
 import pygame
 
-from utils import WHITE_COLOR, BLACK_COLOR
+from utils import *
 
 pygame.init()
 
 
 class Menu:
-    def __init__(self, screen, items, bg_color=BLACK_COLOR, font=None, font_size=100, font_color=WHITE_COLOR):
+    def __init__(self, screen, menu_items, background_color=BLACK_COLOR, font=None, font_size=80, font_color=WHITE_COLOR):
         self.screen = screen
         self.screen_width = self.screen.get_rect().width
         self.screen_height = self.screen.get_rect().height
 
         # Background Main Menu
-        self.background_color = bg_color
+        self.background_color = background_color
         self.background_image = pygame.image.load('resources/images/menubackground.jpg')
         self.background_image_rect = self.background_image.get_rect()
 
@@ -39,7 +39,7 @@ class Menu:
         self.menu_items = []
 
         # Position menu titles on the menu screen
-        for index, item in enumerate(items):
+        for index, item in enumerate(menu_items):
             label = self.font.render(item, 1, font_color)
 
             width = label.get_rect().width
@@ -48,10 +48,10 @@ class Menu:
             labels_position_x = (self.screen_width / 2) - (width / 2)
 
             # total_height: total height of text block
-            total_height = len(items) * height
+            total_height = len(menu_items) * height
 
-            posy = (self.screen_height / 2) - (total_height / 2) + (index * height)
-            self.menu_items.append([item, label, (width, height), (labels_position_x, posy)])
+            position_y = (self.screen_height / 2) - (total_height / 2) + (index * height)
+            self.menu_items.append([item, label, (width, height), (labels_position_x, position_y)])
 
     def run(self):
         menu_loop = True
@@ -83,11 +83,11 @@ class Menu:
                     if event.key == pygame.K_RETURN:
                         self.valid_menu_sound.play()
                         if len(self.current_item) > 0:
-                            if self.current_item[0] == "Start":
+                            if self.current_item[0] == START_GAME_LABEL:
                                 self.start_selected = True
-                            elif self.current_item[0] == "Settings":
+                            elif self.current_item[0] == GAME_SETTINGS_LABEL:
                                 self.settings_selected = True
-                            elif self.current_item[0] == "Quit":
+                            elif self.current_item[0] == QUIT_GAME_LABEL:
                                 self.quit_select = True
 
                             pygame.mixer.music.fadeout(1000)
