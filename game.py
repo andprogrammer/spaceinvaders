@@ -151,6 +151,9 @@ class Game:
 
                         self.screen.blit(invader.image, invader.sprite)
 
+                    if invader.sprite.y > 370:
+                        self.game_over = True
+
             # Remove dead invaders:
             if item_to_remove is not None:
                 del self.invaders[item_to_remove]
