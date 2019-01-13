@@ -10,16 +10,11 @@ pygame.init()
 
 
 def application():
-    # set_mode(resolution=(width, height), flags=0, depth=0)
-    # flags : collection of qdditional options
-    # depth : number of bits use for colors
     screen = pygame.display.set_mode((640, 480), 0, 32)
 
-    # Game Menu
     pygame.display.set_caption(MENU_CAPTION)
     menu_items = (START_GAME_LABEL, GAME_SETTINGS_LABEL, QUIT_GAME_LABEL)
 
-    # Views initialization
     menu = Menu(screen, menu_items)
     settings = Settings(screen)
     game = None

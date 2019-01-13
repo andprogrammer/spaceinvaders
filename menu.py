@@ -9,17 +9,14 @@ pygame.init()
 
 
 class Menu:
-    def __init__(self, screen, menu_items, background_color=BLACK_COLOR, font=None, font_size=80, font_color=YELLOW_COLOR):
+    def __init__(self, screen, menu_items, font=None, font_size=80, font_color=YELLOW_COLOR):
         self.screen = screen
         self.screen_width = self.screen.get_rect().width
         self.screen_height = self.screen.get_rect().height
 
-        # Background Main Menu
-        self.background_color = background_color
         self.background_image = pygame.image.load(DATA_DIRECTORY + 'menubackground.jpg')
         self.background_image_rect = self.background_image.get_rect()
 
-        # Main Menu
         self.clock = pygame.time.Clock()
         self.font = pygame.font.SysFont(font, font_size)
 
@@ -31,7 +28,6 @@ class Menu:
         self.current_item = ()
         self.menu_items = []
 
-        # Position menu titles on the menu screen
         for index, item in enumerate(menu_items):
             label = self.font.render(item, 1, font_color)
 
@@ -40,7 +36,6 @@ class Menu:
 
             labels_position_x = (self.screen_width / 2) - (width / 2)
 
-            # total_height: total height of text block
             total_height = len(menu_items) * height
 
             position_y = (self.screen_height / 2) - (total_height / 2) + (index * height)
@@ -49,9 +44,6 @@ class Menu:
     def run(self):
         menu_loop = True
         while menu_loop:
-            # Limit frame speed to 50 FPS
-            # self.clock.tick(20)
-
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     menu_loop = False
@@ -80,9 +72,6 @@ class Menu:
                             menu_loop = False
 
             self.current_item = self.menu_items[self.index_selected]
-
-            # Redraw the background
-            self.screen.fill(self.background_color)
 
             if not self.start_selected or not self.settings_selected:
                 self.screen.blit(self.background_image, self.background_image_rect)

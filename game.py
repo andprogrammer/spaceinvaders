@@ -19,24 +19,19 @@ class Game:
         self.screen_height = self.screen.get_rect().height
         self.screen_size = self.screen_width, self.screen_height
 
-        # Background Game
         self.background_image = pygame.image.load(DATA_DIRECTORY + "gamebackground.jpg")
         self.background_rect = self.background_image.get_rect()
 
-        # Labels
         self.font = pygame.font.SysFont(None, 40)
         self.game_over_label = self.font.render("Game Over", 1, WHITE_COLOR)
         self.victory_label = self.font.render("Victory", 1, WHITE_COLOR)
 
-        # Life Bar
         self.lifes = []
         self.number_of_lifes = 3
 
-        # Invaders
         self.invaders = []
         self.number_of_invaders = 12
 
-        # Ship and bullets
         self.ship = Ship(self.screen_size)
         self.init_position_bullet = (self.ship.sprite.x + self.ship.sprite.width / 2, self.ship.sprite.y)
         self.bullet = Bullet(self.init_position_bullet)
@@ -45,11 +40,9 @@ class Game:
         self.victory = False
         self.escape_selected = False
 
-        # Objects initialisation
         self.rand_invader = ()
         self.enemy_bullet = ()
 
-        # Invaders
         self.has_already_chosen = False
         # Go down every second
         self.nasty_move_time = 1000
@@ -59,7 +52,6 @@ class Game:
         self.invaders_moving = False
         self.invader_exploding = False
 
-        # Time Variables
         self.clock = pygame.time.Clock()
 
         # Timer for invaders vertical moving
@@ -68,15 +60,12 @@ class Game:
         # Time for invader bullet vertical moving
         self.timecount = 0
 
-        # Init Invaders
         self.invader_init_position_x = 20
         for invader in range(self.number_of_invaders):
             self.invaders.append(Invader((self.invader_init_position_x, 70)))
             self.invader_init_position_x += 50
 
-        # Init life bar
         self.life_init_position_x = 20
-
         for invader in range(self.number_of_lifes):
             self.lifes.append(Life((self.life_init_position_x, 0)))
             self.life_init_position_x += 40
@@ -88,12 +77,10 @@ class Game:
             self.screen.fill([0, 0, 0])
             self.screen.blit(self.background_image, self.background_rect)
 
-            # Close the game when the red cross is clicked
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
 
-            # Keyboard Events
             keys = pygame.key.get_pressed()
 
             if keys[pygame.K_LEFT]:
@@ -124,9 +111,6 @@ class Game:
 
             item_to_remove = None
 
-            # Invader Colision + Vertical Movement
-
-            # Allow slowly vertical movement
             if self.timecount_m > self.nasty_move_time:
                 self.invaders_moving = True
             else:
@@ -148,14 +132,10 @@ class Game:
                     if invader.sprite.y > 370:
                         self.game_over = True
 
-            # Remove dead invaders:
             if item_to_remove is not None:
                 del self.invaders[item_to_remove]
 
             if not self.has_already_chosen:
-
-                # Select random invader among survivor invaders
-
                 if len(self.invaders) > 0 and not self.game_over:
                     if len(self.invaders) is not 1:
                         self.rand_invader = self.invaders[randint(1, len(self.invaders) - 1)]
@@ -174,7 +154,6 @@ class Game:
             self.timecount += self.clock.get_time()
 
             # Handle the bullet shot by the random invader
-
             if self.timecount > self.nasty_shoot_time and self.has_already_chosen:
                 self.timecount = 0
                 self.has_already_chosen = False
